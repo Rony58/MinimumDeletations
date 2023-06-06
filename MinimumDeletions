@@ -1,0 +1,40 @@
+
+
+package com.mycompany.minimumdeletions;
+import java.util.Scanner;
+
+public class MinimumDeletions {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter String 1: ");
+        String string1 = scanner.nextLine();
+
+        System.out.print("Enter String 2: ");
+        String string2 = scanner.nextLine();
+
+        int minimumDeletions = calculateMinimumDeletions(string1, string2);
+        System.out.println("Minimum Deletions: " + minimumDeletions);
+    }
+
+    private static int calculateMinimumDeletions(String string1, String string2) {
+        int[][] dp = new int[string1.length() + 1][string2.length() + 1];
+
+        for (int i = 0; i <= string1.length(); i++) {
+            for (int j = 0; j <= string2.length(); j++) {
+                if (i == 0 || j == 0) {
+                    dp[i][j] = 0;
+                } else if (string1.charAt(i - 1) == string2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+
+        int lcsLength = dp[string1.length()][string2.length()];
+        int minimumDeletions = string1.length() - lcsLength + string2.length() - lcsLength;
+
+        return minimumDeletions;
+    }
+}
